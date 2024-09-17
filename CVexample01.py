@@ -1,0 +1,2 @@
+pip numpy
+!pip matplotlib
