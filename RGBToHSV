@@ -1,0 +1,44 @@
+
+from time import strftime
+import cv2
+import numpy as np
+
+# Cargar una imagen en formato RGB
+image_path = 'Images\Dishes01Jpg.jpg'  # Cambia esto a la ruta correcta
+image_rgb = cv2.imread(image_path)
+
+# Verificar si la imagen se carga correctamente
+if image_rgb is None:
+    print("Error: No se pudo cargar la imagen. Verifica la ruta.")
+    exit()
+
+# Mostrar la imagen original en RGB
+cv2.imshow('Imagen Original (RGB)', image_rgb)
+cv2.waitKey(0)
+
+# Convertir la imagen de RGB a HSV
+image_hsv = cv2.cvtColor(image_rgb, cv2.COLOR_BGR2HSV)
+
+# Mostrar la imagen convertida en HSV
+cv2.imshow('Imagen en HSV', image_hsv)
+cv2.waitKey(0)
+
+# Manipulación: Cambiar el valor de saturación
+h, s, v = cv2.split(image_hsv)  # Separar los canales HSV
+s += 50  # Aumentar la saturación (ajustar según sea necesario)
+s = np.clip(s, 0, 255)  # Asegurarse de que los valores estén en el rango correcto
+image_hsv = cv2.merge((h, s, v))  # Combinar los canales de nuevo
+
+# Convertir de vuelta a RGB
+image_rgb_modified = cv2.cvtColor(image_hsv, cv2.COLOR_HSV2BGR)
+
+# Mostrar la imagen modificada
+cv2.imshow('Imagen Modificada (RGB)', image_rgb_modified)
+cv2.waitKey(0)
+
+# Guardar la imagen modificada
+new_time_str = strftime("%H%M")
+cv2.imwrite('Images\imagen_modificada' + new_time_str + '.jpg', image_rgb_modified)
+
+# Cerrar todas las ventanas
+cv2.destroyAllWindows()
